@@ -1,0 +1,28 @@
+version: '3'
+services:
+  web:
+    container_name: chatty_web
+    build: .
+    ports:
+      - "5000:5000"
+    volumes:
+      - .:/app
+    depends_on:
+      - chatty_db
+    command: >
+      bash -c "python app.py"
+
+  chatty_db:
+    image: postgres:13
+    container_name: chatty_db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASS}
+      POSTGRES_DB: ${POSTGRES_DATABASE}
+    ports:
+     - 15432:5432
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+
+volumes:
+  pg_data:
